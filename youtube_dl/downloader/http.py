@@ -262,7 +262,10 @@ class HttpFD(FileDownloader):
                             self.report_error('unable to set filesize xattr: %s' % str(err))
 
                 try:
-                    ctx.stream.write(data_block)
+                    if self.params.get('file_stream') is not None:
+                        self.params.get('file_stream').write(data_block)
+                    else:
+                        ctx.stream.write(data_block)
                 except (IOError, OSError) as err:
                     self.to_stderr('\n')
                     self.report_error('unable to write data: %s' % str(err))
